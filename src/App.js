@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import SearchBar from './SearchBar';
+import ListaVideo from './ListaVideo';
+import DetaglioVideo from './DetaglioVideo';
+import YTSearch from 'youtube-api-search';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const ApiKey = 'AIzaSyB2vgtZkOz-XyND7bZYr_MYtldcNWB-SVw'
 
+
+
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { videos: [],
+    selectedVideo: null }
+
+    this.videoSearch('ghana')
+
+  };
+
+
+  videoSearch(term) {
+    YTSearch({key: ApiKey, term : term}, (videos) => {
+      this.setState({videos: videos, selectedVideo: videos[0]})
+    })
+
+
+  }
+
+  render() {
+    return (
+      <div className="App">
+      <SearchBar onSearchOnchanged={term => this.videoSearch(term)}/>  
+      <DetaglioVideo video={this.state.selectedVideo} />
+      <ListaVideo 
+      onVideoSelected={selectedVideo => this.setState({selectedVideo})}
+      videos={this.state.videos} />
+          
+      </div>
+    );
+  }
+  
+  }
+  
 export default App;
