@@ -1,11 +1,13 @@
+import _ from 'lodash'
 import React, { Component } from 'react';
 import './App.css';
 import SearchBar from './SearchBar';
 import ListaVideo from './ListaVideo';
 import DetaglioVideo from './DetaglioVideo';
 import YTSearch from 'youtube-api-search';
+import chiave from './chiave';
 
-const ApiKey = 'AIzaSyB2vgtZkOz-XyND7bZYr_MYtldcNWB-SVw'
+const ApiKey = chiave;
 
 
 
@@ -24,19 +26,19 @@ class App extends Component {
     YTSearch({key: ApiKey, term : term}, (videos) => {
       this.setState({videos: videos, selectedVideo: videos[0]})
     })
-
-
   }
 
   render() {
+    const videoSearch = _.debounce((term) => {this.videoSearch(term)}, 300)
     return (
       <div className="App">
-      <SearchBar onSearchOnchanged={term => this.videoSearch(term)}/>  
-      <DetaglioVideo video={this.state.selectedVideo} />
-      <ListaVideo 
+      <SearchBar onSearchOnchanged={videoSearch}/>  
+      <div className='main'>
+      <DetaglioVideo className='item1' video={this.state.selectedVideo} />
+      <ListaVideo className='item2'
       onVideoSelected={selectedVideo => this.setState({selectedVideo})}
       videos={this.state.videos} />
-          
+      </div>  
       </div>
     );
   }

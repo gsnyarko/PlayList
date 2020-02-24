@@ -3,6 +3,13 @@
   text-align: center;
 }
 
+.main {
+  display: flex;
+}
+.item1 {
+width: 75vw;
+}
+
 .search input {
   width: 75%;
 }
